@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "wtfi",
+	"version": "${version}",
+	"name": "Where tf is that item (WTFI)",
+	"description": "An in-inventory library of every item: how to craft it, where it generates or drops, what it's for, enchanting odds and the cheapest anvil order, plus storage memory, hunt mode and gathering checklists.",
+	"authors": [
+		"probablyjeth"
+	],
+	"contact": {
+		"homepage": "https://github.com/Haniel023/Where-TF-is-that-Item",
+		"sources": "https://github.com/Haniel023/Where-TF-is-that-Item",
+		"issues": "https://github.com/Haniel023/Where-TF-is-that-Item/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/wtfi/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.wtfi.Wtfi"
+		],
+		"client": [
+			"com.wtfi.client.WtfiClient"
+		],
+		"modmenu": [
+			"com.wtfi.client.config.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		{
+			"config": "wtfi.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
+	}
+}

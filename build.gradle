@@ -1,0 +1,88 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+repositories {
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/releases/'
+		content {
+			includeGroup 'com.terraformersmc'
+		}
+	}
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"wtfi" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "wtfi-test"
+		enableGameTests = false
+		enableClientGameTests = true
+		// Lets the client gametest start a local dedicated server to test multiplayer.
+		eula = true
+	}
+}
+
+loom {
+	runs {
+		clientGameTest {
+			// Writes the vanilla-only dataset that ships in the jar for servers without WTFI.
+			vmArg "-Dwtfi.exportDataset=${project.layout.buildDirectory.get().asFile}/wtfi/vanilla_dataset.dat"
+		}
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Optional: only used for the "Configure" button in Mod Menu.
+	compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	// Compatibility testing: ./gradlew runClientGameTest -PcompatModsDir=<folder of mod jars>
+	if (project.hasProperty("compatModsDir")) {
+		runtimeOnly fileTree(dir: project.property("compatModsDir"), include: "*.jar")
+	}
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+	it.options.encoding = "UTF-8"
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName" }
+	}
+}

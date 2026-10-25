@@ -1,0 +1,15 @@
+{
+	"schemaVersion": 1,
+	"id": "wtfi-test",
+	"version": "1.0.0",
+	"name": "WTFI tests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-client-gametest": [
+			"com.wtfi.test.WtfiClientGameTest"
+		]
+	},
+	"depends": {
+		"wtfi": "*"
+	}
+}
